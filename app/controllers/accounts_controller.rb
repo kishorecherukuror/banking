@@ -1,5 +1,5 @@
 class AccountsController < ApplicationController
-	before_action :find_account, only: [:show, :edit, :update, :destroy, :transfer]
+	before_action :find_account, only: [:show, :edit, :update, :destroy]
 
 	def index
         @accounts= Account.all
@@ -13,7 +13,17 @@ class AccountsController < ApplicationController
 	end
 
 	def transfer
-
+		puts "******************"
+		if params[:account]
+			@sender = Account.find params[:id]
+			@reciever = Account.find params[:account]
+			@ramount = @reciever.account_balance + params[:amount].to_f
+			@reciever.update(:account_balance => @ramount)
+			@samount = @sender.account_balance - params[:amount].to_f
+			
+			@sender.update(:account_balance => @samount)
+		end
+			
 	end
 
 	def create
